@@ -1,0 +1,12 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Setup webhook",
+      "type": "shell",
+      "command": "curl -X POST https://api.telegram.org/bot5490553180:AAEUnrGF9x8pKFd5n1BatluUEtIuJ5V0Qbc/setWebhook -H \"Content-type: application/json\" -d '{\"url\": \"https://ca6c-88-25-23-42.ngrok.io/api/webhook\"}'"
+    }
+  ]
+}

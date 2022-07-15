@@ -1,0 +1,23 @@
+{
+  "name": "stickergen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "develop": "TELEGRAM_TOKEN=5490553180:AAEUnrGF9x8pKFd5n1BatluUEtIuJ5V0Qbc vercel dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.12",
+    "global": "^4.4.0",
+    "node-telegram-bot-api": "^0.58.0",
+    "vercel": "^27.1.3"
+  },
+  "devDependencies": {
+    "ngrok": "^4.3.1"
+  }
+}
