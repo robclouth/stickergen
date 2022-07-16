@@ -34,9 +34,9 @@ async function renderSketch(sketchSource) {
     <!DOCTYPE html>
     <html lang="en">
     <head>
-      <script src="p5.js"></script>
-      <script src="p5.sound.min.js"></script>
-      <link rel="stylesheet" type="text/css" href="style.css">
+      <script src="file://${__dirname}/../sketch/p5.js"></script>
+      <script src="file://${__dirname}/../sketch/p5.sound.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="file://${__dirname}/../sketch/style.css">
       <meta charset="utf-8">
     </head>
     <body>
@@ -55,8 +55,8 @@ async function renderSketch(sketchSource) {
       )
       .on("pageerror", ({ message }) => console.log(message));
 
-    await page.goto(`file://${__dirname}/sketch/empty.html`);
-    // await page.setContent(html);
+    await page.goto(`file://${__dirname}/../sketch/empty.html`);
+    await page.setContent(html);
     await page.waitForSelector("canvas", { timeout: 5000 });
 
     const element = await page.$("canvas");
