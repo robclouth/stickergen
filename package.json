@@ -18,7 +18,8 @@
     "chrome-aws-lambda": "^10.1.0",
     "global": "^4.4.0",
     "node-telegram-bot-api": "^0.58.0",
-    "puppeteer-core": "^15.4.0"
+    "puppeteer-core": "^15.4.0",
+    "sharp": "^0.30.7"
   },
   "devDependencies": {
     "ngrok": "^4.3.1",

@@ -4,6 +4,7 @@ process.env.NTBA_FIX_319 = "test";
 
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
+const sharp = require("sharp");
 
 let chrome = {};
 let puppeteer;
@@ -54,14 +55,16 @@ async function renderSketch(sketchSource) {
     const element = await page.$("canvas");
     if (!element) throw "Canvas element not found";
 
-    const imageBuffer = await element.screenshot({
+    const pngBuffer = await element.screenshot({
       type: "png",
       omitBackground: true,
     });
 
+    const webpBuffer = await sharp(pngBuffer).webp().toBuffer();
+
     await browser.close();
 
-    return imageBuffer;
+    return webpBuffer;
   } catch (err) {
     console.error(err);
     return null;
@@ -108,18 +111,7 @@ module.exports = async (request, response) => {
         } else {
           const imageBuffer = await renderSketch(sketchFile.content);
           console.log("Rendered.");
-          await bot.sendPhoto(
-            id,
-            imageBuffer,
-            {
-              parse_mode: "Markdown",
-              caption: `[${data.name} by ${data.user.username}](https://editor.p5js.org/${data.user.username}/sketches/${data.id})`,
-            },
-            {
-              filename: "render.png",
-              contentType: "image/png",
-            }
-          );
+          await bot.sendSticker(id, imageBuffer);
         }
       }
     }
