@@ -6,7 +6,7 @@
     {
       "label": "Setup local webhook",
       "type": "shell",
-      "command": "curl -X POST https://api.telegram.org/bot5575192233:AAFKgg33RWKbqMpOBfA5eZm6CRILJh4qYEI/setWebhook -H \"Content-type: application/json\" -d '{\"url\": \"https://bb75-88-25-23-42.ngrok.io/api/webhook\"}'",
+      "command": "curl -X POST https://api.telegram.org/bot5575192233:AAFKgg33RWKbqMpOBfA5eZm6CRILJh4qYEI/setWebhook -H \"Content-type: application/json\" -d '{\"url\": \"https://7699-88-25-23-42.ngrok.io/api/webhook\"}'",
       "problemMatcher": []
     },
     {

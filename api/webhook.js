@@ -34,13 +34,11 @@ async function renderSketch(sketchSource) {
     <!DOCTYPE html>
     <html lang="en">
     <head>
-      <script src="file://${__dirname}/../sketch/p5.js"></script>
-      <script src="file://${__dirname}/../sketch/p5.sound.min.js"></script>
-      <link rel="stylesheet" type="text/css" href="file://${__dirname}/../sketch/style.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
       <meta charset="utf-8">
     </head>
     <body>
-      <script type="text/javascript">
+      <script>
       ${sketchSource}
       </script>
     </body>
@@ -55,7 +53,6 @@ async function renderSketch(sketchSource) {
       )
       .on("pageerror", ({ message }) => console.log(message));
 
-    await page.goto(`file://${__dirname}/../sketch/empty.html`);
     await page.setContent(html);
     await page.waitForSelector("canvas", { timeout: 5000 });
 
