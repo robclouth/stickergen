@@ -15,12 +15,13 @@ if (process.env.AWS_REGION) {
 } else {
   // running locally.
   puppeteer = require("puppeteer");
+  chrome = { args: [] };
 }
 
 async function renderSketch(sketchSource) {
   try {
     let browser = await puppeteer.launch({
-      args: ["--hide-scrollbars", "--disable-web-security"],
+      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
       defaultViewport: chrome.defaultViewport,
       executablePath: await chrome.executablePath,
       headless: true,
