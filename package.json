@@ -17,7 +17,8 @@
     "axios": "^0.27.2",
     "chrome-aws-lambda": "^10.1.0",
     "node-telegram-bot-api": "^0.58.0",
-    "puppeteer-core": "^15.4.0"
+    "puppeteer-core": "^15.4.0",
+    "webp-converter": "^2.3.3"
   },
   "devDependencies": {
     "ngrok": "^4.3.1",

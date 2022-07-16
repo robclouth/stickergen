@@ -113,7 +113,7 @@ module.exports = async (request, response) => {
             id,
             imageBuffer,
             {},
-            { contentType: "image/webp" }
+            { contentType: "image/webp", filename: "sticker.webp" }
           );
         }
       }
