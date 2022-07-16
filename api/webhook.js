@@ -4,7 +4,6 @@ process.env.NTBA_FIX_319 = "test";
 
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
-const sharp = require("sharp");
 
 let chrome = {};
 let puppeteer;
@@ -55,12 +54,10 @@ async function renderSketch(sketchSource) {
     const element = await page.$("canvas");
     if (!element) throw "Canvas element not found";
 
-    const pngBuffer = await element.screenshot({
-      type: "png",
+    const webpBuffer = await element.screenshot({
+      type: "webp",
       omitBackground: true,
     });
-
-    const webpBuffer = await sharp(pngBuffer).webp().toBuffer();
 
     await browser.close();
 
