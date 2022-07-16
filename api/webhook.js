@@ -8,7 +8,7 @@ const fs = require("fs");
 let chrome = {};
 let puppeteer;
 
-if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+if (process.env.AWS_REGION) {
   // running on the Vercel platform.
   chrome = require("chrome-aws-lambda");
   puppeteer = require("puppeteer-core");
