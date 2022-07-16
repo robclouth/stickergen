@@ -4,7 +4,7 @@ process.env.NTBA_FIX_319 = "test";
 
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
-const fs = require("fs");
+
 let chrome = {};
 let puppeteer;
 
@@ -40,15 +40,15 @@ async function renderSketch(sketchSource) {
       <meta charset="utf-8">
     </head>
     <body>
-      <script>
+      <script type="text/javascript">
       ${sketchSource}
       </script>
     </body>
     </html>
     `;
 
+    await page.goto(`file://${__dirname}/sketch/empty.html`);
     await page.setContent(html);
-
     await page.waitForSelector("canvas", { timeout: 5000 });
 
     const element = await page.$("canvas");
@@ -88,6 +88,7 @@ module.exports = async (request, response) => {
           { parse_mode: "Markdown" }
         );
       } else {
+        console.log("Rendering sketch...");
         const username = parts[0].trim();
         const sketchId = parts[1].trim();
         const url = `https://editor.p5js.org/editor/${username}/projects/${sketchId}`;
@@ -106,7 +107,7 @@ module.exports = async (request, response) => {
           );
         } else {
           const imageBuffer = await renderSketch(sketchFile.content);
-
+          console.log("Rendered.");
           await bot.sendPhoto(
             id,
             imageBuffer,
