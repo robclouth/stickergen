@@ -6,7 +6,13 @@
     {
       "label": "Setup webhook",
       "type": "shell",
-      "command": "curl -X POST https://api.telegram.org/bot5490553180:AAEUnrGF9x8pKFd5n1BatluUEtIuJ5V0Qbc/setWebhook -H \"Content-type: application/json\" -d '{\"url\": \"https://ca6c-88-25-23-42.ngrok.io/api/webhook\"}'"
+      "command": "curl -X POST https://api.telegram.org/bot5575192233:AAFKgg33RWKbqMpOBfA5eZm6CRILJh4qYEI/setWebhook -H \"Content-type: application/json\" -d '{\"url\": \"https://248c-88-25-23-42.ngrok.io/api/webhook\"}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Start ngrok",
+      "type": "shell",
+      "command": "yarn ngrok http 3000"
     }
   ]
 }
