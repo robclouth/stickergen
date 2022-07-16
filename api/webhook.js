@@ -1,7 +1,3 @@
-// https://github.com/yagop/node-telegram-bot-api/issues/319#issuecomment-324963294
-// Fixes an error with Promise cancellation
-process.env.NTBA_FIX_319 = "test";
-
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
 
@@ -113,7 +109,12 @@ module.exports = async (request, response) => {
         } else {
           const imageBuffer = await renderSketch(sketchFile.content);
           console.log("Rendered.");
-          await bot.sendSticker(id, imageBuffer);
+          await bot.sendSticker(
+            id,
+            imageBuffer,
+            {},
+            { contentType: "image/webp" }
+          );
         }
       }
     }
