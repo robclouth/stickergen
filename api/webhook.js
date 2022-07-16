@@ -4,6 +4,55 @@ process.env.NTBA_FIX_319 = "test";
 
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
+const fs = require("fs");
+let chrome = {};
+let puppeteer;
+
+if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+  // running on the Vercel platform.
+  chrome = require("chrome-aws-lambda");
+  puppeteer = require("puppeteer-core");
+} else {
+  // running locally.
+  puppeteer = require("puppeteer");
+}
+
+async function renderSketch(sketchSource) {
+  fs.writeFileSync(`${__dirname}/sketch/sketch.js`, sketchSource);
+
+  try {
+    let browser = await puppeteer.launch({
+      args: ["--hide-scrollbars", "--disable-web-security"],
+      defaultViewport: chrome.defaultViewport,
+      executablePath: await chrome.executablePath,
+      headless: true,
+      ignoreHTTPSErrors: true,
+    });
+
+    const page = await browser.newPage();
+
+    //  __dirname is a global node variable that corresponds to the absolute
+    // path of the folder containing the currently executing file
+    await page.goto(`file://${__dirname}/sketch/index.html`);
+
+    await page.waitForSelector("canvas", { timeout: 5000 });
+
+    const element = await page.$("canvas");
+    if (!element) throw "Canvas element not found";
+
+    const imageBuffer = await element.screenshot({
+      type: "png",
+      omitBackground: true,
+    });
+
+    await browser.close();
+
+    return imageBuffer;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
 
 module.exports = async (request, response) => {
   try {
@@ -18,40 +67,45 @@ module.exports = async (request, response) => {
 
       const parts = text.split(" ");
 
-      if (parts[0] === "/generate") {
-        if (parts.length !== 3) {
+      if (parts.length !== 2) {
+        await bot.sendMessage(
+          id,
+          `You must include the username and sketch ID like: */generate rob.clouth Y7eLtQ9Ct*`,
+          { parse_mode: "Markdown" }
+        );
+      } else {
+        const username = parts[0].trim();
+        const sketchId = parts[1].trim();
+        const url = `https://editor.p5js.org/editor/${username}/projects/${sketchId}`;
+
+        const response = await axios.get(url);
+
+        const data = response.data;
+        const files = data.files;
+        const sketchFile = files.find((file) => file.name === "sketch.js");
+
+        if (!sketchFile) {
           await bot.sendMessage(
             id,
-            `You must include the username and sketch ID like: */generate rob.clouth Y7eLtQ9Ct*`,
+            `The sketch must have a single js file named *sketch.js*`,
             { parse_mode: "Markdown" }
           );
         } else {
-          const username = parts[1].trim();
-          const sketchId = parts[2].trim();
-          const url = `https://editor.p5js.org/editor/${username}/projects/${sketchId}`;
-          console.log(url);
+          const imageBuffer = await renderSketch(sketchFile.content);
 
-          const response = await axios.get(url);
-          const files = response.data.files;
-          const sketchFile = files.find((file) => file.name === "sketch.js");
-
-          if (!sketchFile) {
-            await bot.sendMessage(
-              id,
-              `The sketch must have a single js file named *sketch.js*`,
-              { parse_mode: "Markdown" }
-            );
-          } else {
-            console.log(sketchFile.content);
-            await bot.sendMessage(id, sketchFile.content, {
+          await bot.sendPhoto(
+            id,
+            imageBuffer,
+            {
               parse_mode: "Markdown",
-            });
-          }
+              caption: `[${data.name} by ${data.user.username}](https://editor.p5js.org/${data.user.username}/sketches/${data.id})`,
+            },
+            {
+              filename: "render.png",
+              contentType: "image/png",
+            }
+          );
         }
-      } else {
-        await bot.sendMessage(id, `Unrecognised command`, {
-          parse_mode: "Markdown",
-        });
       }
     }
   } catch (error) {
