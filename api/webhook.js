@@ -31,8 +31,6 @@ async function renderSketch(sketchSource) {
 
     const page = await browser.newPage();
 
-    //  __dirname is a global node variable that corresponds to the absolute
-    // path of the folder containing the currently executing file
     await page.goto(`file://${__dirname}/sketch/index.html`);
 
     await page.waitForSelector("canvas", { timeout: 5000 });
