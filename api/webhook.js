@@ -51,7 +51,7 @@ async function renderSketch(sketchSource) {
     // await page.setContent(html);
     // await page.waitForSelector("canvas", { timeout: 5000 });
 
-    const element = await page.$("canvas");
+    const element = await page.$("body");
     if (!element) throw "Canvas element not found";
 
     const webpBuffer = await element.screenshot({
