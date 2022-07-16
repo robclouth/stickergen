@@ -4,7 +4,6 @@ process.env.NTBA_FIX_319 = "test";
 
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
-const cheerio = require("cheerio");
 
 module.exports = async (request, response) => {
   try {
