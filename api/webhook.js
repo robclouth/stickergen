@@ -47,6 +47,14 @@ async function renderSketch(sketchSource) {
     </html>
     `;
 
+    page
+      .on("console", (message) =>
+        console.log(
+          `${message.type().substr(0, 3).toUpperCase()} ${message.text()}`
+        )
+      )
+      .on("pageerror", ({ message }) => console.log(message));
+
     await page.goto(`file://${__dirname}/sketch/empty.html`);
     // await page.setContent(html);
     await page.waitForSelector("canvas", { timeout: 5000 });
