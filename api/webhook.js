@@ -49,7 +49,7 @@ async function renderSketch(sketchSource) {
 
     await page.goto(`file://${__dirname}/sketch/empty.html`);
     await page.setContent(html);
-    await page.waitForSelector("canvas", { timeout: 5000 });
+    await page.waitForSelector("canvas");
 
     const element = await page.$("canvas");
     if (!element) throw "Canvas element not found";
