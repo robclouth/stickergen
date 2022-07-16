@@ -18,8 +18,6 @@ if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
 }
 
 async function renderSketch(sketchSource) {
-  fs.writeFileSync(`${__dirname}/sketch/sketch.js`, sketchSource);
-
   try {
     let browser = await puppeteer.launch({
       args: ["--hide-scrollbars", "--disable-web-security"],
@@ -31,7 +29,24 @@ async function renderSketch(sketchSource) {
 
     const page = await browser.newPage();
 
-    await page.goto(`file://${__dirname}/sketch/index.html`);
+    const html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <script src="p5.js"></script>
+      <script src="p5.sound.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="style.css">
+      <meta charset="utf-8">
+    </head>
+    <body>
+      <script>
+      ${sketchSource}
+      </script>
+    </body>
+    </html>
+    `;
+
+    await page.setContent(html);
 
     await page.waitForSelector("canvas", { timeout: 5000 });
 
