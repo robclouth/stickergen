@@ -1,5 +1,6 @@
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
+const webp = require("promised-webp-converter");
 
 let chrome = {};
 let puppeteer;
@@ -55,10 +56,12 @@ async function renderSketch(sketchSource) {
     const element = await page.$("canvas");
     if (!element) throw "Canvas element not found";
 
-    const webpBuffer = await element.screenshot({
+    const pngBuffer = await element.screenshot({
       type: "webp",
       omitBackground: true,
     });
+
+    const webpBuffer = await webp.buffer2webpbuffer(pngBuffer, "png", "-q 80");
 
     await browser.close();
 

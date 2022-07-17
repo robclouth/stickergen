@@ -1983,6 +1983,13 @@ progress@2.0.3:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
+promised-webp-converter@^2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/promised-webp-converter/-/promised-webp-converter-2.3.4.tgz#8f314e432fea89c5793ff68ba1b522f44b36af25"
+  integrity sha512-7v0F3nfEdPSyTOVz8lSaHYgRXL/JrD0T6xog4ENERf4fb2i+Q7PSsm/6ii94TUR4vkOsEZs3F0t1ym99Aff54w==
+  dependencies:
+    uuid "^8.3.2"
+
 proxy-from-env@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
@@ -2603,13 +2610,6 @@ webidl-conversions@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
   integrity sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==
-
-webp-converter@^2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/webp-converter/-/webp-converter-2.3.3.tgz#fd7a0620c71749370e2795930092703beb386575"
-  integrity sha512-2p4XvPCIQ/CbUztEFA9vdkILVrRTdMtMxFpQTxlnPc3qx14MV5wnpVvK7m6pG70QdeL+Ser0+Tp843ONwh8VbQ==
-  dependencies:
-    uuid "^8.3.2"
 
 whatwg-url@^5.0.0:
   version "5.0.0"
