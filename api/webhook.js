@@ -1,6 +1,10 @@
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
+const crypto = require("crypto");
 require("dotenv").config();
+
+const botName = "@genstickbot";
+const bot = new TelegramBot(process.env.TELEGRAM_TOKEN);
 
 let chrome = {};
 let puppeteer;
@@ -15,7 +19,7 @@ if (process.env.AWS_REGION) {
   chrome = { args: [] };
 }
 
-async function renderSketch(sketchSource) {
+async function renderSketch(sketchSourceCode) {
   try {
     let browser = await puppeteer.launch({
       args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
@@ -41,7 +45,7 @@ async function renderSketch(sketchSource) {
     </head>
     <body>
       <script>
-      ${sketchSource}
+      ${sketchSourceCode}
       </script>
     </body>
     </html>
@@ -66,10 +70,6 @@ async function renderSketch(sketchSource) {
       omitBackground: true,
     });
 
-    console.log(imageBuffer.length);
-
-    // const webpBuffer = await webp.buffer2webpbuffer(pngBuffer, "png", "-q 80");
-
     await browser.close();
 
     return imageBuffer;
@@ -79,53 +79,78 @@ async function renderSketch(sketchSource) {
   }
 }
 
+async function fetchSketchData(query) {
+  const parts = query.split(" ");
+
+  if (parts.length !== 2) {
+    throw new Error(
+      `You must include the username and sketch ID like: *rob.clouth Y7eLtQ9Ct*`
+    );
+  } else {
+    const username = parts[0].trim();
+    const sketchId = parts[1].trim();
+    const url = `https://editor.p5js.org/editor/${username}/projects/${sketchId}`;
+
+    const response = await axios.get(url);
+
+    const data = response.data;
+    const files = data.files;
+    const sketchFile = files.find((file) => file.name === "sketch.js");
+
+    if (!sketchFile) {
+      throw new Error(
+        `The sketch must have a single js file named *sketch.js*`
+      );
+    } else {
+      return { sourceCode: sketchFile.content, sketchData: data };
+    }
+  }
+}
+
 module.exports = async (request, response) => {
   try {
-    const bot = new TelegramBot(process.env.TELEGRAM_TOKEN);
-
     const { body } = request;
     if (body.message) {
-      const {
+      let {
         chat: { id },
         text,
       } = body.message;
 
-      const parts = text.split(" ");
+      text = text.replace(botName, "").trim();
 
-      if (parts.length !== 2) {
-        await bot.sendMessage(
+      try {
+        const { sketchSourceCode, sketchData } = await fetchSketchData(text);
+
+        const imageBuffer = await renderSketch(sketchSourceCode);
+
+        await bot.sendSticker(
           id,
-          `You must include the username and sketch ID like: */generate rob.clouth Y7eLtQ9Ct*`,
-          { parse_mode: "Markdown" }
+          imageBuffer,
+          {},
+          { contentType: "image/png", filename: "sticker.png" }
         );
-      } else {
-        console.log("Rendering sketch...");
-        const username = parts[0].trim();
-        const sketchId = parts[1].trim();
-        const url = `https://editor.p5js.org/editor/${username}/projects/${sketchId}`;
+      } catch (err) {
+        await bot.sendMessage(id, err.message, { parse_mode: "Markdown" });
+      }
+    } else if (body.inline_query) {
+      const { query, id } = body.inline_query;
 
-        const response = await axios.get(url);
+      try {
+        const { sketchSourceCode, sketchData } = await fetchSketchData(query);
 
-        const data = response.data;
-        const files = data.files;
-        const sketchFile = files.find((file) => file.name === "sketch.js");
-
-        if (!sketchFile) {
-          await bot.sendMessage(
-            id,
-            `The sketch must have a single js file named *sketch.js*`,
-            { parse_mode: "Markdown" }
-          );
-        } else {
-          const imageBuffer = await renderSketch(sketchFile.content);
-          console.log("Rendered.");
-          await bot.sendSticker(
-            id,
-            imageBuffer,
-            {},
-            { contentType: "image/webp", filename: "sticker.webp" }
-          );
-        }
+        await bot.answerInlineQuery(id, [
+          {
+            type: "article",
+            id: crypto.randomUUID(),
+            title: sketchData.name,
+            input_message_content: {
+              message_text: `${botName} ${query}`,
+              parse_mode: "Markdown",
+            },
+          },
+        ]);
+      } catch (err) {
+        console.log(err.message);
       }
     }
   } catch (error) {

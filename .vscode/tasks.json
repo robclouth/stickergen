@@ -4,18 +4,6 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Setup local webhook",
-      "type": "shell",
-      "command": "curl -X POST https://api.telegram.org/bot5575192233:AAFKgg33RWKbqMpOBfA5eZm6CRILJh4qYEI/setWebhook -H \"Content-type: application/json\" -d '{\"url\": \"https://5f31-88-25-23-42.ngrok.io/api/webhook\"}'",
-      "problemMatcher": []
-    },
-    {
-      "label": "Setup vercel webhook",
-      "type": "shell",
-      "command": "curl -X POST https://api.telegram.org/bot5575192233:AAFKgg33RWKbqMpOBfA5eZm6CRILJh4qYEI/setWebhook -H \"Content-type: application/json\" -d '{\"url\": \"https://stickergen.vercel.app/api/webhook\"}'",
-      "problemMatcher": []
-    },
-    {
       "label": "Start ngrok",
       "type": "shell",
       "command": "yarn ngrok http 3000",
