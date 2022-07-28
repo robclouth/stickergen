@@ -28,8 +28,8 @@ async function renderSketch(sketchSource) {
     const page = await browser.newPage();
 
     await page.setViewport({
-      width: 512,
-      height: 512,
+      width: 1024,
+      height: 1024,
     });
 
     const html = `
