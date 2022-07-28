@@ -12,3 +12,15 @@ Content-Type: application/json
     "text": "qwe"
   }
 }
+
+###
+POST https://api.telegram.org/bot5575192233:AAFKgg33RWKbqMpOBfA5eZm6CRILJh4qYEI/setWebhook
+Content-type: application/json
+
+{"url": "https://5f31-88-25-23-42.ngrok.io/api/webhook"}
+
+###
+POST https://api.telegram.org/bot5575192233:AAFKgg33RWKbqMpOBfA5eZm6CRILJh4qYEI/setWebhook
+Content-type: application/json
+
+{"url": "https://stickergen.vercel.app/api/webhook"}

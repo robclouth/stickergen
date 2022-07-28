@@ -1,6 +1,5 @@
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
-const webp = require("promised-webp-converter");
 require("dotenv").config();
 
 let chrome = {};
