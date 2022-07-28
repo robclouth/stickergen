@@ -1,17 +1,7 @@
 GET https://editor.p5js.org/editor/rob.clouth/projects/Y7eLtQ9Ct
 
 ###
-GET http://localhost:3000/api/webhook
-Content-Type: application/json
-
-{
-  "message": {
-    "chat": {
-      "id": "1"
-    },
-    "text": "qwe"
-  }
-}
+GET https://editor.p5js.org/editor/rob.clouth/projects
 
 ###
 POST https://api.telegram.org/bot5575192233:AAFKgg33RWKbqMpOBfA5eZm6CRILJh4qYEI/setWebhook

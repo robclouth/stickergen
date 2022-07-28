@@ -19,7 +19,7 @@ if (process.env.AWS_REGION) {
   chrome = { args: [] };
 }
 
-async function renderSketch(sketchSourceCode) {
+async function renderSketch(code) {
   try {
     let browser = await puppeteer.launch({
       args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
@@ -45,7 +45,7 @@ async function renderSketch(sketchSourceCode) {
     </head>
     <body>
       <script>
-      ${sketchSourceCode}
+      ${code}
       </script>
     </body>
     </html>
@@ -102,7 +102,7 @@ async function fetchSketchData(query) {
         `The sketch must have a single js file named *sketch.js*`
       );
     } else {
-      return { sourceCode: sketchFile.content, sketchData: data };
+      return { code: sketchFile.content, sketchData: data };
     }
   }
 }
@@ -119,9 +119,9 @@ module.exports = async (request, response) => {
       text = text.replace(botName, "").trim();
 
       try {
-        const { sketchSourceCode, sketchData } = await fetchSketchData(text);
+        const { code, sketchData } = await fetchSketchData(text);
 
-        const imageBuffer = await renderSketch(sketchSourceCode);
+        const imageBuffer = await renderSketch(code);
 
         await bot.sendSticker(
           id,
@@ -136,15 +136,18 @@ module.exports = async (request, response) => {
       const { query, id } = body.inline_query;
 
       try {
-        const { sketchSourceCode, sketchData } = await fetchSketchData(query);
+        const { code, sketchData } = await fetchSketchData(query);
 
         await bot.answerInlineQuery(id, [
           {
             type: "article",
             id: crypto.randomUUID(),
             title: sketchData.name,
+            description: `By ${sketchData.user.username}`,
+            hide_url: false,
+            url: `https://editor.p5js.org/editor/${sketchData.user.username}/projects/${sketchData.id}`,
             input_message_content: {
-              message_text: `${botName} ${query}`,
+              message_text: `${botName} ${sketchData.user.username} ${sketchData.id}`,
               parse_mode: "Markdown",
             },
           },
