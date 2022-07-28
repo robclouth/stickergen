@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "develop": "TELEGRAM_TOKEN=5575192233:AAFKgg33RWKbqMpOBfA5eZm6CRILJh4qYEI vercel dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "develop": "vercel dev"
   },
   "engines": {
     "node": "14.x"
@@ -16,6 +15,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "chrome-aws-lambda": "^10.1.0",
+    "dotenv": "^16.0.1",
     "node-telegram-bot-api": "^0.58.0",
     "promised-webp-converter": "^2.3.4",
     "puppeteer-core": "^15.4.0"
