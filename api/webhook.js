@@ -56,16 +56,18 @@ async function renderSketch(sketchSource) {
     const element = await page.$("canvas");
     if (!element) throw "Canvas element not found";
 
-    const webpBuffer = await element.screenshot({
-      type: "webp",
+    const imageBuffer = await element.screenshot({
+      type: "png",
       omitBackground: true,
     });
+
+    console.log(imageBuffer.length);
 
     // const webpBuffer = await webp.buffer2webpbuffer(pngBuffer, "png", "-q 80");
 
     await browser.close();
 
-    return webpBuffer;
+    return imageBuffer;
   } catch (err) {
     console.error(err);
     return null;
