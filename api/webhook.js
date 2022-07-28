@@ -1,5 +1,5 @@
 const TelegramBot = require("node-telegram-bot-api");
-const axios = require("axios");
+// const axios = require("axios");
 const webp = require("promised-webp-converter");
 require("dotenv").config();
 
@@ -86,41 +86,41 @@ module.exports = async (request, response) => {
 
       const parts = text.split(" ");
 
-      if (parts.length !== 2) {
-        await bot.sendMessage(
-          id,
-          `You must include the username and sketch ID like: */generate rob.clouth Y7eLtQ9Ct*`,
-          { parse_mode: "Markdown" }
-        );
-      } else {
-        console.log("Rendering sketch...");
-        const username = parts[0].trim();
-        const sketchId = parts[1].trim();
-        const url = `https://editor.p5js.org/editor/${username}/projects/${sketchId}`;
+      // if (parts.length !== 2) {
+      //   await bot.sendMessage(
+      //     id,
+      //     `You must include the username and sketch ID like: */generate rob.clouth Y7eLtQ9Ct*`,
+      //     { parse_mode: "Markdown" }
+      //   );
+      // } else {
+      //   console.log("Rendering sketch...");
+      //   const username = parts[0].trim();
+      //   const sketchId = parts[1].trim();
+      //   const url = `https://editor.p5js.org/editor/${username}/projects/${sketchId}`;
 
-        const response = await axios.get(url);
+      //   const response = await axios.get(url);
 
-        const data = response.data;
-        const files = data.files;
-        const sketchFile = files.find((file) => file.name === "sketch.js");
+      //   const data = response.data;
+      //   const files = data.files;
+      //   const sketchFile = files.find((file) => file.name === "sketch.js");
 
-        if (!sketchFile) {
-          await bot.sendMessage(
-            id,
-            `The sketch must have a single js file named *sketch.js*`,
-            { parse_mode: "Markdown" }
-          );
-        } else {
-          const imageBuffer = await renderSketch(sketchFile.content);
-          console.log("Rendered.");
-          await bot.sendSticker(
-            id,
-            imageBuffer,
-            {},
-            { contentType: "image/webp", filename: "sticker.webp" }
-          );
-        }
-      }
+      //   if (!sketchFile) {
+      //     await bot.sendMessage(
+      //       id,
+      //       `The sketch must have a single js file named *sketch.js*`,
+      //       { parse_mode: "Markdown" }
+      //     );
+      //   } else {
+      //     const imageBuffer = await renderSketch(sketchFile.content);
+      //     console.log("Rendered.");
+      //     await bot.sendSticker(
+      //       id,
+      //       imageBuffer,
+      //       {},
+      //       { contentType: "image/webp", filename: "sticker.webp" }
+      //     );
+      //   }
+      // }
     }
   } catch (error) {
     console.error("Error sending message");
